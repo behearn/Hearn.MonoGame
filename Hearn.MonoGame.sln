@@ -1,0 +1,18 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Hearn.MonoGame", "Hearn.MonoGame\Hearn.MonoGame.shproj", "{8305C0A6-A341-491A-A447-86F6BDAABA34}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Hearn.MonoGame\Hearn.MonoGame.projitems*{8305c0a6-a341-491a-a447-86f6bdaaba34}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F761F500-51C3-4521-8B69-C210C8120613}
+	EndGlobalSection
+EndGlobal
