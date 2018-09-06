@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{09
 		Demos\Packages\LilyPath.dll = Demos\Packages\LilyPath.dll
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineCollision", "LineCollision\LineCollision.csproj", "{D8D7919F-EADE-478D-825C-98F1BFCBF481}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LineCollision", "Demos\LineCollision\LineCollision.csproj", "{D8D7919F-EADE-478D-825C-98F1BFCBF481}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
