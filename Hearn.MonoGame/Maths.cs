@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Hearn.MonoGame
 {
-    class Maths
+    public class Maths
     {
 
         public static float Distance(Vector2 v1, Vector2 v2)
@@ -14,7 +14,6 @@ namespace Hearn.MonoGame
             var dy = v2.Y - v1.Y;
             return (float)Math.Sqrt(dx * dx + dy * dy);
         }
-
 
     }
 }

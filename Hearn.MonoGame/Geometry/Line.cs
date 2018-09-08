@@ -5,18 +5,42 @@ using System.Text;
 
 namespace Hearn.MonoGame.Geometry
 {
-    class Line
+    public class Line
     {
+
+        public Line()
+        {
+        }
+
+        public Line(Vector2 start, Vector2 end)
+        {
+            Start = start;
+            End = end;
+        }
 
         public Vector2 Start { get; set; }
         public Vector2 End { get; set; }
 
-        public Vector2 Intersects(Line l)
+        public float Length { get => Math.Abs(Maths.Distance(Start, End)); }
+
+        public bool Intersects(Line l)
         {
-            return Intersects(l, false);
+            return CalculateIntersection(l, false, out Vector2 v);
         }
 
-        public Vector2 Intersects(Line l, bool extend)
+        public Vector2 IntersectsAt(Line l)
+        {
+            CalculateIntersection(l, false, out Vector2 v);
+            return v;
+        }
+
+        public Vector2 IntersectPoint(Line l)
+        {
+            CalculateIntersection(l, true, out Vector2 v);
+            return v;
+        }
+
+        private bool CalculateIntersection(Line l, bool extend, out Vector2 intersectVector)
         {
 
             //Coding Math Episode 32/34
@@ -39,11 +63,12 @@ namespace Hearn.MonoGame.Geometry
 
                 if (extend)
                 {
-                    return new Vector2()
+                    intersectVector = new Vector2()
                     {
                         X = intersectX,
                         Y = intersectY
                     };
+                    return true;
                 }
 
                 var rx0 = (intersectX - Start.X) / (End.X - Start.X);
@@ -55,15 +80,17 @@ namespace Hearn.MonoGame.Geometry
                 if (((rx0 >= 0 && rx0 <= 1) || (ry0 >= 0 && ry0 <= 1)) &&
                     ((rx1 >= 0 && rx1 <= 1) || (ry1 >= 0 && ry1 <= 1)))
                 {
-                    return new Vector2()
+                    intersectVector = new Vector2()
                     {
                         X = intersectX,
                         Y = intersectY
                     };
+                    return true;
                 }
             }
 
-            return new Vector2(0f / 0f);
+            intersectVector = new Vector2(0f / 0f);
+            return false;
 
         }
         

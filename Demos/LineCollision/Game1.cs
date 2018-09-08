@@ -98,7 +98,7 @@ namespace LineCollision
                 _dragPoints[i].Update();
             }
             
-            _intersection = _line1.Intersects(_line2, true);
+            _intersection = _line1.IntersectsAt(_line2);
 
             base.Update(gameTime);
         }

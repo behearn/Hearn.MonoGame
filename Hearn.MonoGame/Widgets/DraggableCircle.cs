@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Hearn.MonoGame.Widgets
 {
-    class DraggableCircle
+    public class DraggableCircle
     {
 
         private Circle _circle;
@@ -62,12 +62,9 @@ namespace Hearn.MonoGame.Widgets
                 {
                     _selected = false;
                 }
-
             }
             
         }
-
-
 
     }
 }

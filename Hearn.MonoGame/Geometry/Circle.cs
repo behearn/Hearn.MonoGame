@@ -5,10 +5,20 @@ using System.Text;
 
 namespace Hearn.MonoGame.Geometry
 {
-    class Circle
+    public class Circle
     {
         public Vector2 Location { get; set; }
         public float Radius { get; set; }
+
+        public Circle()
+        {
+        }
+
+        public Circle(Vector2 location, float radius)
+        {
+            Location = location;
+            Radius = radius;
+        }
 
         public bool Intersects(Circle c)
         {
