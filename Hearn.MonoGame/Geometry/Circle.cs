@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Hearn.MonoGame.Helpers;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -22,12 +23,12 @@ namespace Hearn.MonoGame.Geometry
 
         public bool Intersects(Circle c)
         {
-            return Maths.Distance(c.Location, Location) <= c.Radius + Radius;           
+            return Vector2Ex.Distance(c.Location, Location) <= c.Radius + Radius;           
         }
 
         public bool Intersects(Vector2 v)
         {
-            return Maths.Distance(v, Location) <= Radius;
+            return Vector2Ex.Distance(v, Location) <= Radius;
         }
 
     }

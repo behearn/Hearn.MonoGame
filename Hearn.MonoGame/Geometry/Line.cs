@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Hearn.MonoGame.Helpers;
+using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -21,7 +22,7 @@ namespace Hearn.MonoGame.Geometry
         public Vector2 Start { get; set; }
         public Vector2 End { get; set; }
 
-        public float Length { get => Math.Abs(Maths.Distance(Start, End)); }
+        public float Length { get => Math.Abs(Vector2Ex.Distance(Start, End)); }
 
         public bool Intersects(Line l)
         {
