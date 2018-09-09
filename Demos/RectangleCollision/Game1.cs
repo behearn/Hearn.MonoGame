@@ -73,13 +73,14 @@ namespace RectangleCollision
             var mouseState = Mouse.GetState();
             _rectangle1.Location = mouseState.Position.ToVector2();
 
-            var x = (GraphicsDevice.Viewport.Width / 2) - (_rectangle0.Width / 2);
-            var y = (GraphicsDevice.Viewport.Height / 2) - (_rectangle0.Height / 2);
-            _rectangle0.Location = new Vector2(x, y);
+            //var x = (GraphicsDevice.Viewport.Width / 2) - (_rectangle0.Width / 2);
+            //var y = (GraphicsDevice.Viewport.Height / 2) - (_rectangle0.Height / 2);
+            //_rectangle0.Location = new Vector2(x, y);
 
             _pen = Pen.Black;
-            if (_rectangle0.Intersects(_rectangle1, out Vector2 penetration))
+            if (_rectangle1.Intersects(_rectangle0, out Vector2 penetration))
             {
+                System.Console.WriteLine(penetration);
                 _rectangle0.Location += penetration;
                 _pen = Pen.Red;
             }

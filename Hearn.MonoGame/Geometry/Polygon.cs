@@ -10,6 +10,8 @@ namespace Hearn.MonoGame.Geometry
     public abstract class Polygon
     {
 
+        protected Vector2 _location;
+
         protected Vector2[] _p;
 
         protected readonly int _numVerticies;
@@ -37,7 +39,7 @@ namespace Hearn.MonoGame.Geometry
 
         public Vector2[] GetEdgeNormals()
         {
-            var normals = new Vector2[_numVerticies];
+            var normals = new List<Vector2>();
             for (var i = 0; i < _numVerticies; i++)
             {
                 var p0 = _p[i];
@@ -45,9 +47,12 @@ namespace Hearn.MonoGame.Geometry
                 var edge = p0 - p1;
                 var normal = Vector2Ex.Normal(edge);
                 normal.Normalize();
-                normals[i] = normal;
+                if (!normals.Any(n => Math.Abs(Vector2Ex.DotProduct(n, normal)) == 1f))
+                {
+                    normals.Add(normal);
+                }
             }
-            return normals;
+            return normals.ToArray();
         }
 
         public bool Intersects(Polygon p)
@@ -58,11 +63,12 @@ namespace Hearn.MonoGame.Geometry
         public bool Intersects(Polygon p, out Vector2 penetration)
         {
             //Separating Axis Theorom Implementation
+            //Ported from Love2D Tutorial
 
             var axes0 = GetEdgeNormals();
             var axes1 = p.GetEdgeNormals();
             var axes = axes0.Union(axes1).ToArray();
-
+            
             var overlap = float.MaxValue;
 
             penetration = new Vector2(0f / 0f);
@@ -90,7 +96,19 @@ namespace Hearn.MonoGame.Geometry
             }
 
             var overlapVector = new Vector2(overlap);
-            penetration = penetration * overlapVector; //TODO : Fix sign
+            penetration = penetration * overlapVector;
+
+            //Still not quite right when colliding at bottom right
+            var separationVector = _location - p._location;
+            if (Math.Sign(separationVector.X) != Math.Sign(overlapVector.X))
+            {
+                penetration.X *= -1;
+            }
+
+            if (Math.Sign(separationVector.Y) == Math.Sign(overlapVector.Y))
+            {
+                penetration.Y *= -1;
+            }
 
             return true;
         }

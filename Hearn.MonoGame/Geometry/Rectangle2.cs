@@ -8,9 +8,7 @@ namespace Hearn.MonoGame.Geometry
 {
     public class Rectangle2 : Polygon
     {
-
-        private Vector2 _location;
-
+        
         private float _width;
         private float _height;
 
@@ -41,7 +39,7 @@ namespace Hearn.MonoGame.Geometry
             set
             {
                 _location = value;
-                RefreshRect();
+                Recalculate();
             }
         }
 
@@ -51,7 +49,7 @@ namespace Hearn.MonoGame.Geometry
             set
             {
                 _width = value;
-                RefreshRect();
+                Recalculate();
             }
         }
 
@@ -61,7 +59,7 @@ namespace Hearn.MonoGame.Geometry
             set
             {
                 _height = value;
-                RefreshRect();
+                Recalculate();
             }
         }
 
@@ -73,7 +71,7 @@ namespace Hearn.MonoGame.Geometry
                 if (value != _angle)
                 {
                     _angle = value;
-                    RefreshRect();
+                    Recalculate();
                 }
             }
         }
@@ -91,7 +89,7 @@ namespace Hearn.MonoGame.Geometry
             }
         }
         
-        private void RefreshRect()
+        protected virtual void Recalculate()
         {
 
             //Set points working clockwise from p[0]
