@@ -10,11 +10,15 @@ namespace Hearn.MonoGame.Geometry
     public abstract class Polygon
     {
 
-        protected Vector2 _location;
+        private Vector2 _location;
+        private Vector2 _lastLocation;
 
-        protected Vector2[] _p;
+        private Vector2 _originVector;
+        private bool _centerOrigin;
 
-        protected readonly int _numVerticies;
+        private readonly int _numVerticies;
+
+        private float _angle;
 
         private struct Projection
         {
@@ -27,57 +31,119 @@ namespace Hearn.MonoGame.Geometry
             public float Max;
         }
 
+        /// <summary>
+        /// Creates a polygon with the specified number of verticies
+        /// </summary>
+        /// <param name="verticies"></param>
         public Polygon(int verticies)
         {
             _numVerticies = verticies;
-            _p = new Vector2[verticies];
+            Verticies = new Vector2[verticies];
         }
 
-        public Vector2[] Verticies { get => _p; }
-
-        public Vector2[] VerticiesClosed { get => _p.Concat(_p.Take(1)).ToArray(); }
-
-        public Vector2[] GetEdgeNormals()
+        /// <summary>
+        /// Top left location 
+        /// </summary>
+        public Vector2 Location
         {
-            var normals = new List<Vector2>();
-            for (var i = 0; i < _numVerticies; i++)
+            get => _location;
+            set
             {
-                var p0 = _p[i];
-                var p1 = _p[(i + 1) % _numVerticies];
-                var edge = p0 - p1;
-                var normal = Vector2Ex.Normal(edge);
-                normal.Normalize();
-                if (!normals.Any(n => Math.Abs(Vector2Ex.DotProduct(n, normal)) == 1f))
+                _location = value;
+                Recalculate();
+            }
+        }
+
+        /// <summary>
+        /// Distance from location to rotate around.  Use CenterOrigin to keep it centered on the bounding rectangle.
+        /// </summary>
+        public Vector2 OriginVector
+        {
+            get => _originVector;
+            set
+            {
+                if (_centerOrigin)
                 {
-                    normals.Add(normal);
+                    throw new Exception("Origin cannot be set when centered");
+                }
+                _originVector = value;
+            }
+        }
+
+        /// <summary>
+        /// Rotation angle in degrees 
+        /// </summary>
+        public float Angle
+        {
+            get => _angle;
+            set
+            {
+                if (value != _angle)
+                {
+                    _angle = value;
+                    Recalculate();
                 }
             }
-            return normals.ToArray();
         }
 
-        public bool Intersects(Polygon p)
+        /// <summary>
+        /// Keeps Origin centered around the bounding rectangle
+        /// </summary>
+        public bool CenterOrigin
         {
-            return Intersects(p, out Vector2 penetration);
+            get => _centerOrigin;
+            set
+            {
+                _centerOrigin = value;
+                Recalculate();
+            }
         }
-        
-        public bool Intersects(Polygon p, out Vector2 penetration)
+
+        /// <summary>
+        /// Verticies listed in clockwise order
+        /// </summary>
+        public Vector2[] Verticies { get; }
+
+        /// <summary>
+        /// Verticies starting and finishing at the same point to give a closed path
+        /// </summary>
+        public Vector2[] VerticiesClosed { get => Verticies.Concat(Verticies.Take(1)).ToArray(); }
+
+        /// <summary>
+        /// Applies Separating Axis Theorom to determine if the supplied polygon collides with this polygon
+        /// </summary>
+        /// <param name="polygon"></param>
+        /// <returns></returns>
+        public bool Collides(Polygon polygon)
         {
-            //Separating Axis Theorom Implementation
-            //Ported from Love2D Tutorial
+            return Collides(polygon, out Vector2 penetration);
+        }
+
+        /// <summary>
+        /// Applies Separating Axis Theorom to determine if the supplied polygon collides with this polygon
+        /// </summary>
+        /// <param name="polygon">Polygon to check</param>
+        /// <param name="penetration">Amount this polygon is being pushed by</param>
+        /// <returns></returns>
+        public bool Collides(Polygon polygon, out Vector2 penetration)
+        {
+
+            //Based on Love2D Tutorial EP48: SAT Collision Detection by recursor 
+            //https://github.com/bncastle/love2d-tutorial/tree/Episode48
 
             var axes0 = GetEdgeNormals();
-            var axes1 = p.GetEdgeNormals();
+            var axes1 = polygon.GetEdgeNormals();
             var axes = axes0.Union(axes1).ToArray();
-            
+
             var overlap = float.MaxValue;
 
             penetration = new Vector2(0f / 0f);
-            
+
             for (var i = 0; i < axes.Length; i++)
             {
                 var axis = axes[i];
                 var proj0 = Project(this, axis);
-                var proj1 = Project(p, axis);
+                var proj1 = Project(polygon, axis);
 
                 if (proj0.Min > proj1.Max || proj1.Min > proj0.Max)
                 {
@@ -98,17 +164,9 @@ namespace Hearn.MonoGame.Geometry
             var overlapVector = new Vector2(overlap);
             penetration = penetration * overlapVector;
 
-            //Still not quite right when colliding at bottom right
-            var separationVector = _location - p._location;
-            if (Math.Sign(separationVector.X) != Math.Sign(overlapVector.X))
-            {
-                penetration.X *= -1;
-            }
-
-            if (Math.Sign(separationVector.Y) == Math.Sign(overlapVector.Y))
-            {
-                penetration.Y *= -1;
-            }
+            var separationVector = (_location + _originVector) - (polygon._location + polygon._originVector);
+            penetration.X = Math.Abs(penetration.X) * -Math.Sign(separationVector.X);
+            penetration.Y = Math.Abs(penetration.Y) * -Math.Sign(separationVector.Y);
 
             return true;
         }
@@ -117,6 +175,64 @@ namespace Hearn.MonoGame.Geometry
         {
             var dp = polygon.Verticies.Select(v => Vector2Ex.DotProduct(axis, v));
             return new Projection(dp.Min(), dp.Max());
+        }
+
+        protected Vector2[] GetEdgeNormals()
+        {
+            var normals = new List<Vector2>();
+            for (var i = 0; i < _numVerticies; i++)
+            {
+                var edge = Verticies[i] - Verticies[(i + 1) % _numVerticies];
+                var normal = Vector2Ex.Normal(edge);
+                normal.Normalize();
+                if (!normals.Any(n => Math.Abs(Vector2Ex.DotProduct(n, normal)) == 1f))
+                {
+                    normals.Add(normal);
+                }
+            }
+            return normals.ToArray();
+        }
+        
+        protected virtual Vector2 RecalculateOrigin()
+        {
+            var width = Verticies.Max(v => v.X) - Verticies.Min(v => v.X);
+            var height = Verticies.Max(v => v.Y) - Verticies.Min(v => v.Y);
+            return new Vector2((width / 2), (height / 2));
+        }
+
+        protected virtual void UpdateVerticies()
+        {
+            var locationVector = _location - _lastLocation;
+            for (var i = 0; i < Verticies.Length; i++)
+            {
+                Verticies[i] += locationVector;
+            }
+            _lastLocation = _location;
+        }
+
+        protected void RotateVerticiesAroundOrigin()
+        {
+            var radians = MathHelper.ToRadians(Angle);
+            for (var i = 0; i < Verticies.Length; i++)
+            {
+                Verticies[i] -= (_location + _originVector);
+                Verticies[i] = Vector2.Transform(Verticies[i], Matrix.CreateRotationZ(radians));
+                Verticies[i] += (_location + _originVector);
+            }
+        }
+
+        protected virtual void Recalculate()
+        {
+
+            UpdateVerticies();
+
+            if (_centerOrigin)
+            {
+                _originVector = RecalculateOrigin();
+            }
+
+            RotateVerticiesAroundOrigin();
+
         }
 
     }

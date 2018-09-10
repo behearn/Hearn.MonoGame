@@ -97,7 +97,7 @@ namespace TriangleCollision
             _pen2 = Pen.Black;
 
 
-            if (_triangle1.Intersects(_triangle2))
+            if (_triangle1.Collides(_triangle2))
             {
                 _pen1 = Pen.Red;
                 _pen2 = Pen.Red;
@@ -106,11 +106,11 @@ namespace TriangleCollision
             {
                 var mouseState = Mouse.GetState();
 
-                if (_triangle1.Intersects(mouseState.Position.ToVector2()))
+                if (_triangle1.Collides(mouseState.Position.ToVector2()))
                 {
                     _pen1 = Pen.Yellow;
                 }
-                if (_triangle2.Intersects(mouseState.Position.ToVector2()))
+                if (_triangle2.Collides(mouseState.Position.ToVector2()))
                 {
                     _pen2 = Pen.Yellow;
                 }

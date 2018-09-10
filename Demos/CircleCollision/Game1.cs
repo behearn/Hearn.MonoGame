@@ -66,7 +66,7 @@ namespace CircleCollision
             }
             _lastScrollWheelValue = mouseState.ScrollWheelValue;
 
-            if (_circle1.Intersects(_circle2))
+            if (_circle1.Collides(_circle2))
             {
                 _brush = Brush.Red;
             }

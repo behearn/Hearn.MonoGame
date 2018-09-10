@@ -42,7 +42,7 @@ namespace Hearn.MonoGame.Widgets
 
             var mouseLocation = new Vector2(mouseState.X, mouseState.Y);
 
-            if (!_selected && _circle.Intersects(mouseLocation))
+            if (!_selected && _circle.Collides(mouseLocation))
             {
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {

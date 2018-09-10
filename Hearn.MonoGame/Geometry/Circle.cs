@@ -21,12 +21,12 @@ namespace Hearn.MonoGame.Geometry
             Radius = radius;
         }
 
-        public bool Intersects(Circle c)
+        public bool Collides(Circle c)
         {
             return Vector2Ex.Distance(c.Location, Location) <= c.Radius + Radius;           
         }
 
-        public bool Intersects(Vector2 v)
+        public bool Collides(Vector2 v)
         {
             return Vector2Ex.Distance(v, Location) <= Radius;
         }

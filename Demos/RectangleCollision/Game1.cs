@@ -69,18 +69,12 @@ namespace RectangleCollision
                 _rectangle0.Width += 1;
             }
 
-
             var mouseState = Mouse.GetState();
             _rectangle1.Location = mouseState.Position.ToVector2();
 
-            //var x = (GraphicsDevice.Viewport.Width / 2) - (_rectangle0.Width / 2);
-            //var y = (GraphicsDevice.Viewport.Height / 2) - (_rectangle0.Height / 2);
-            //_rectangle0.Location = new Vector2(x, y);
-
             _pen = Pen.Black;
-            if (_rectangle1.Intersects(_rectangle0, out Vector2 penetration))
+            if (_rectangle1.Collides(_rectangle0, out Vector2 penetration))
             {
-                System.Console.WriteLine(penetration);
                 _rectangle0.Location += penetration;
                 _pen = Pen.Red;
             }
@@ -92,12 +86,10 @@ namespace RectangleCollision
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            drawBatch.Begin();
-            
+            drawBatch.Begin();            
             
             var path0 = new GraphicsPath(_pen, _rectangle0.VerticiesClosed);
             drawBatch.DrawPath(path0);
-
 
             var path1 = new GraphicsPath(_pen, _rectangle1.VerticiesClosed);
             drawBatch.DrawPath(path1);

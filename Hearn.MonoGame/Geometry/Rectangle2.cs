@@ -12,15 +12,19 @@ namespace Hearn.MonoGame.Geometry
         private float _width;
         private float _height;
 
-        private Vector2 _origin;
-        private bool _centerOrigin;
-
-        private float _angle;
-
+        /// <summary>
+        /// Creates a rectangle based on the Polygon class
+        /// </summary>
         public Rectangle2() : base(4)
         {            
         }
 
+        /// <summary>
+        /// Creates a rectangle based on the Polygon class
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         public Rectangle2(Vector2 location, float width, float height) : this()
         {
             Location = location;
@@ -28,21 +32,21 @@ namespace Hearn.MonoGame.Geometry
             Height = height;
         }
 
+        /// <summary>
+        /// Creates a rectangle based on the Polygon class
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="centerOrigin"></param>
         public Rectangle2(Vector2 location, float width, float height, bool centerOrigin) : this(location, width, height)
         {
-            _centerOrigin = centerOrigin;
+            CenterOrigin = centerOrigin;
         }
 
-        public Vector2 Location
-        {
-            get => _location;
-            set
-            {
-                _location = value;
-                Recalculate();
-            }
-        }
-
+        /// <summary>
+        /// Width of the rectangle.  Automatically updates Verticies.
+        /// </summary>
         public float Width
         {
             get => _width;
@@ -53,6 +57,9 @@ namespace Hearn.MonoGame.Geometry
             }
         }
 
+        /// <summary>
+        /// Height of the rectangle.  Automatically updates Verticies.
+        /// </summary>
         public float Height
         {
             get => _height;
@@ -63,54 +70,19 @@ namespace Hearn.MonoGame.Geometry
             }
         }
 
-        public float Angle
+        protected override Vector2 RecalculateOrigin()
         {
-            get => _angle;
-            set
-            {
-                if (value != _angle)
-                {
-                    _angle = value;
-                    Recalculate();
-                }
-            }
+            //Width & height known, no need to calculate them
+            return new Vector2((_width / 2), (_height / 2));
         }
 
-        public Vector2 Origin
+        protected override void UpdateVerticies()
         {
-            get => _origin;
-            set
-            {
-                if (_centerOrigin)
-                {
-                    throw new Exception("Rectangle2 Origin cannot be set when centered");
-                }
-                _origin = value;
-            }
-        }
-        
-        protected virtual void Recalculate()
-        {
-
-            //Set points working clockwise from p[0]
-            _p[0] = _location;
-            _p[1] = _location + new Vector2(Width, 0);
-            _p[2] = _location + new Vector2(Width, Height);
-            _p[3] = _location + new Vector2(0, Height);
-
-            if (_centerOrigin)
-            {
-                _origin = new Vector2(_p[0].X + (_width / 2), _p[0].Y + (_height/ 2));
-            }
-
-            var radians = MathHelper.ToRadians(Angle);
-            for (var i = 0; i < _p.Length; i++)
-            {
-                _p[i] -= _origin;
-                _p[i] = Vector2.Transform(_p[i], Matrix.CreateRotationZ(radians));
-                _p[i] += _origin;
-            }
-
+            //Set points working clockwise from _verticies[0]
+            Verticies[0] = Location;
+            Verticies[1] = Location + new Vector2(Width, 0);
+            Verticies[2] = Location + new Vector2(Width, Height);
+            Verticies[3] = Location + new Vector2(0, Height);
         }
 
     }

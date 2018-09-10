@@ -82,16 +82,16 @@ namespace Hearn.MonoGame.Geometry
             get => (float)Math.Acos(((AB.Length * AB.Length) + (BC.Length * BC.Length) - (CA.Length * CA.Length)) / (2 * AB.Length * BC.Length));
         }
 
-        public bool Intersects(Triangle t)
+        public bool Collides(Triangle t)
         {
             return AB.Intersects(t.AB) || AB.Intersects(t.BC) || AB.Intersects(t.CA)
                 || BC.Intersects(t.AB) || BC.Intersects(t.BC) || BC.Intersects(t.CA)
                 || CA.Intersects(t.AB) || CA.Intersects(t.BC) || CA.Intersects(t.CA)
-                || Intersects(t.A) 
-                || t.Intersects(A);            
+                || Collides(t.A) 
+                || t.Collides(A);            
         }
 
-        public bool Intersects(Vector2 v)
+        public bool Collides(Vector2 v)
         {
             var dx = v.X - C.X;
             var dy = v.Y - C.Y;
