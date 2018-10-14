@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hearn.MonoGame", "Libs\Wind
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Windows", "Windows", "{4273FEBE-C084-47F5-A14A-9221092BFBCA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircleLineCollision", "Demos\CircleLineCollision\CircleLineCollision.csproj", "{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Hearn.MonoGame\Hearn.MonoGame.projitems*{8305c0a6-a341-491a-a447-86f6bdaaba34}*SharedItemsImports = 13
@@ -70,6 +72,12 @@ Global
 		{CF8584CC-E1BF-4697-8C3D-5A6EFD2E4FEC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CF8584CC-E1BF-4697-8C3D-5A6EFD2E4FEC}.Release|x86.ActiveCfg = Release|Any CPU
 		{CF8584CC-E1BF-4697-8C3D-5A6EFD2E4FEC}.Release|x86.Build.0 = Release|Any CPU
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}.Debug|x86.ActiveCfg = Debug|x86
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}.Debug|x86.Build.0 = Debug|x86
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}.Release|Any CPU.ActiveCfg = Release|x86
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}.Release|x86.ActiveCfg = Release|x86
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -82,6 +90,7 @@ Global
 		{CBE3AF90-D6C5-4DA9-9E98-07E85C8F8FFB} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 		{CF8584CC-E1BF-4697-8C3D-5A6EFD2E4FEC} = {4273FEBE-C084-47F5-A14A-9221092BFBCA}
 		{4273FEBE-C084-47F5-A14A-9221092BFBCA} = {34E08E25-13FB-45B8-95A2-1CBA5B8F6359}
+		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F761F500-51C3-4521-8B69-C210C8120613}
