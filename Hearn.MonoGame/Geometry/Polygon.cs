@@ -37,8 +37,17 @@ namespace Hearn.MonoGame.Geometry
         /// <param name="verticies"></param>
         public Polygon(int verticies)
         {
+            if (verticies < 3)
+            {
+                throw new ArgumentException("Minimum number of verticies is 3");
+            }
             _numVerticies = verticies;
             Verticies = new Vector2[verticies];
+            Lines = new Line[verticies];
+            for (var i = 0; i < Verticies.Length; i++)
+            {
+                Lines[i] = new Line();
+            }
         }
 
         /// <summary>
@@ -99,6 +108,8 @@ namespace Hearn.MonoGame.Geometry
             }
         }
 
+        public Line[] Lines { get; }
+
         /// <summary>
         /// Verticies listed in clockwise order
         /// </summary>
@@ -108,6 +119,44 @@ namespace Hearn.MonoGame.Geometry
         /// Verticies starting and finishing at the same point to give a closed path
         /// </summary>
         public Vector2[] VerticiesClosed { get => Verticies.Concat(Verticies.Take(1)).ToArray(); }
+
+        /// <summary>
+        /// Determines if point v is within the polygon by ray casting on the x and y axis and counting edges
+        /// </summary>
+        /// <param name="v"></param>
+        /// <returns></returns>
+        public bool Collides(Vector2 v)
+        {
+            var rayCastX = new Line(v, v + new Vector2(v.X + 200, 0));
+            var rayCastY = new Line(v, v + new Vector2(0, v.Y + 200));
+
+            var intersectionsX = 0;
+            var intersectionsY = 0;
+            foreach (var l in Lines)
+            {
+
+                var intersectPointX = rayCastX.IntersectPoint(l);
+                if (!float.IsNaN(intersectPointX.X))
+                {
+                    if (intersectPointX.X >= rayCastX.Start.X)
+                    {
+                        intersectionsX++;
+                    }
+                }
+
+                var intersectPointY = rayCastY.IntersectPoint(l);
+                if (!float.IsNaN(intersectPointY.Y))
+                {
+                    if (intersectPointY.Y >= rayCastY.Start.Y)
+                    {
+                        intersectionsY++;
+                    }
+                }
+            }
+
+            //If both rays cross an odd number of edges we are inside
+            return (intersectionsX % 2 == 1) && (intersectionsY % 2 == 1);
+        }
 
         /// <summary>
         /// Applies Separating Axis Theorom to determine if the supplied polygon collides with this polygon
@@ -210,6 +259,17 @@ namespace Hearn.MonoGame.Geometry
             _lastLocation = _location;
         }
 
+        private void UpdateLines()
+        {
+            for (var i = 0; i < Verticies.Length; i++)
+            {
+                var a = Verticies[i];
+                var b = Verticies[(i + 1) % Verticies.Length];
+                Lines[i].Start = a;
+                Lines[i].End = b;
+            }
+        }
+
         protected void RotateVerticiesAroundOrigin()
         {
             var radians = MathHelper.ToRadians(Angle);
@@ -225,6 +285,8 @@ namespace Hearn.MonoGame.Geometry
         {
 
             UpdateVerticies();
+
+            UpdateLines();
 
             if (_centerOrigin)
             {

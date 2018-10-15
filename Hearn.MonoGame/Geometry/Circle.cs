@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Hearn.MonoGame.Geometry
@@ -33,8 +34,44 @@ namespace Hearn.MonoGame.Geometry
 
         public bool Collides(Line l)
         {
+            var intersections = IntersectPoints(l);
+            return intersections.Any();
+        }
 
-            //http://mathworld.wolfram.com/Circle-LineIntersection.html
+        public bool Collides(Polygon p)
+        {
+            if (p.Collides(Location))
+            {
+                return true;
+            }
+            if (IntersectPoints(p).Any())
+            {
+                return true;
+            }
+            return false;
+        }
+
+        public List<Vector2> IntersectPoints(Polygon p)
+        {
+            var allIntersections = new List<Vector2>();
+            foreach (var l in p.Lines)
+            {
+                var intersections = IntersectPoints(l);
+                allIntersections.AddRange(intersections);
+            }
+            return allIntersections;
+        }
+
+        public List<Vector2> IntersectPoints(Line l)
+        {
+            
+            //Weisstein, Eric W. "Circle-Line Intersection." From MathWorld--A Wolfram Web Resource. 
+            //http://mathworld.wolfram.com/Circle-LineIntersection.html 
+            //Except 
+            //1) sgn(x) function has been modified to work with horizontal lines
+            //2) Added condition to constrain to bounds of the line
+
+            var intersections = new List<Vector2>();
 
             var x1 = l.Start.X - Location.X;
             var y1 = l.Start.Y - Location.Y;
@@ -47,32 +84,33 @@ namespace Hearn.MonoGame.Geometry
             var dr = Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
             var d = (x1 * y2) - (x2 * y1);
 
-            var incidence = (Math.Pow(Radius, 2) * Math.Pow(dr, 2)) - Math.Pow(d, 2);
-
-            if (incidence >= 0)
+            var discriminant = (Math.Pow(Radius, 2) * Math.Pow(dr, 2)) - Math.Pow(d, 2);            
+            if (discriminant >= 0)
             {
+                // Note: NOT the same as reference which states x < 0 = -1 (which is how Math.Sign works also)
+                var sgn = new Func<float, int>(x => x <= 0 ? -1 : 1); 
 
-                var ix1 = ((d * dy) + ((Math.Sign(dy) * dx) * Math.Sqrt(incidence))) / Math.Pow(dr, 2);
-                var iy1 = ((-d * dx) + (Math.Abs(dy) * Math.Sqrt(incidence))) / Math.Pow(dr, 2);
+                var ix1 = ((d * dy) + ((sgn(dy) * dx) * Math.Sqrt(discriminant))) / Math.Pow(dr, 2);
+                var iy1 = ((-d * dx) + (Math.Abs(dy) * Math.Sqrt(discriminant))) / Math.Pow(dr, 2);
 
                 if (ix1 >= Math.Min(x1, x2) && ix1 <= Math.Max(x1, x2)
                     && iy1 >= Math.Min(y1, y2) && iy1 <= Math.Max(y1, y2))
                 {
-                    return true;
+                    intersections.Add(new Vector2((int)ix1 + Location.X, (int)iy1 + Location.Y));
                 }
 
-                var ix2 = ((d * dy) - ((Math.Sign(dy) * dx) * Math.Sqrt(incidence))) / Math.Pow(dr, 2);
-                var iy2 = ((-d * dx) - (Math.Abs(dy) * Math.Sqrt(incidence))) / Math.Pow(dr, 2);
+                var ix2 = ((d * dy) - ((sgn(dy) * dx) * Math.Sqrt(discriminant))) / Math.Pow(dr, 2);
+                var iy2 = ((-d * dx) - (Math.Abs(dy) * Math.Sqrt(discriminant))) / Math.Pow(dr, 2);
 
                 if (ix2 >= Math.Min(x1, x2) && ix2 <= Math.Max(x1, x2)
                     && iy2 >= Math.Min(y1, y2) && iy2 <= Math.Max(y1, y2))
                 {
-                    return true;
+                    intersections.Add(new Vector2((int)ix2 + Location.X, (int)iy2 + Location.Y));
                 }
 
             }
 
-            return false;
+            return intersections;
 
         }
     }

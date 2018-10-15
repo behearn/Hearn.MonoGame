@@ -5,8 +5,9 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.Linq;
 
-namespace CircleLineCollision
+namespace CirclePolygonCollision
 {
     public class Game1 : Game
     {
@@ -15,11 +16,10 @@ namespace CircleLineCollision
         DrawBatch drawBatch;
 
         Circle _circle;
-        Line _line;
+        Polygon _polygon;
 
         Brush _brush;
-
-        DraggableCircle[] _dragPoints;
+        
 
         List<Vector2> _intersections;
 
@@ -29,48 +29,30 @@ namespace CircleLineCollision
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
         }
-        
+
         protected override void Initialize()
         {
-            drawBatch = new DrawBatch(GraphicsDevice);
+            drawBatch = new DrawBatch(GraphicsDevice);            
 
-            const int Margin = 50;
-            const int DragCircleRadius = 10;
+            var x = GraphicsDevice.Viewport.Width / 2;
+            var y = GraphicsDevice.Viewport.Height / 2;
+            var size = 125;
 
-            var x = GraphicsDevice.Viewport.Width - Margin;
-            var y = GraphicsDevice.Viewport.Height - Margin;
-
-            _line = new Line() { Start = new Vector2(Margin, Margin), End = new Vector2(x, y) };
-
-            _dragPoints = new DraggableCircle[4];
-
-            _dragPoints[0] = new DraggableCircle()
-            {
-                Location = _line.Start,
-                Radius = DragCircleRadius,
-                OnDrag = v => { _line.Start = v; }
-            };
-
-            _dragPoints[1] = new DraggableCircle()
-            {
-                Location = _line.End,
-                Radius = DragCircleRadius,
-                OnDrag = v => { _line.End = v; }
-            };
-
+            _polygon = new Rectangle2(new Vector2(x - size, y - size), 2 * size, 2 * size);
+            
             _circle = new Circle() { Radius = 100 };
 
             _intersections = new List<Vector2>();
 
             base.Initialize();
         }
-        
+
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
         }
-        
+
         protected override void UnloadContent()
         {
         }
@@ -79,25 +61,27 @@ namespace CircleLineCollision
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            for (var i = 0; i < 2; i++)
-            {
-                _dragPoints[i].Update();
-            }
-
+            
             var mouseState = Mouse.GetState();
             _circle.Location = new Vector2(mouseState.X, mouseState.Y);
 
-            _intersections.Clear();
-
             _brush = Brush.White;
-            if (_circle.Collides(_line))
+            if (_circle.Collides(_polygon))
             {
                 _brush = Brush.Red;
-                var lineIntersections = _circle.IntersectPoints(_line);
-                _intersections.AddRange(lineIntersections);
             }
 
+            _intersections.Clear();
+            foreach (var line in _polygon.Lines)
+            {                
+                var lineIntersections = _circle.IntersectPoints(line);
+                _intersections.AddRange(lineIntersections);                
+            }
+            if (_intersections.Any())
+            {
+                _brush = Brush.Orange;
+            }
+            
             base.Update(gameTime);
         }
 
@@ -109,12 +93,10 @@ namespace CircleLineCollision
 
             drawBatch.FillCircle(_brush, _circle.Location, _circle.Radius);
 
-            drawBatch.DrawLine(Pen.Black, _line.Start, _line.End);
-
-            for (var i = 0; i < 2; i++)
+            foreach (var line in _polygon.Lines)
             {
-                drawBatch.FillCircle(Brush.Green, _dragPoints[i].Location, _dragPoints[i].Radius);
-            }
+                drawBatch.DrawLine(Pen.Black, line.Start, line.End);
+            }            
 
             foreach (var intersection in _intersections)
             {
