@@ -15,7 +15,7 @@ namespace Hearn.MonoGame.Geometry
         /// <summary>
         /// Creates a rectangle based on the Polygon class
         /// </summary>
-        public Rectangle2() : base(4)
+        public Rectangle2() : base(new Vector2[4])
         {            
         }
 

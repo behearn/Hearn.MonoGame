@@ -20,8 +20,9 @@ namespace CirclePolygonCollision
 
         Brush _brush;
         
-
         List<Vector2> _intersections;
+
+        const int Radius = 10;
 
         public Game1()
         {
@@ -32,15 +33,34 @@ namespace CirclePolygonCollision
 
         protected override void Initialize()
         {
-            drawBatch = new DrawBatch(GraphicsDevice);            
+            drawBatch = new DrawBatch(GraphicsDevice);
 
             var x = GraphicsDevice.Viewport.Width / 2;
             var y = GraphicsDevice.Viewport.Height / 2;
-            var size = 125;
 
-            _polygon = new Rectangle2(new Vector2(x - size, y - size), 2 * size, 2 * size);
+            //var size = 125;
+            //_polygon = new Rectangle2(new Vector2(x - size, y - size), 2 * size, 2 * size);
+            //var verticies = _polygon.Verticies;
+
+            var verticies = new Vector2[] {
+                new Vector2(0,0),
+                new Vector2(64, 32),
+                new Vector2(96, 64),
+                new Vector2(128, 96),
+                new Vector2(160, 128),
+                new Vector2(-64, 64)
+            };
+            _polygon = new Polygon(verticies);
             
-            _circle = new Circle() { Radius = 100 };
+            var width = verticies.Max(v => v.X) - verticies.Min(v => v.X);
+            var height = verticies.Max(v => v.Y) - verticies.Min(v => v.Y);        
+            var offsetX = verticies[0].X - verticies.Min(v => v.X);
+            var offsetY = verticies[0].Y - verticies.Min(v => v.Y);
+            _polygon.Location = new Vector2(x, y) - new Vector2(width / 2, height / 2) + new Vector2(offsetX, offsetY);
+
+            _polygon.Angle = 330;
+
+            _circle = new Circle() { Radius = Radius };
 
             _intersections = new List<Vector2>();
 
@@ -64,6 +84,8 @@ namespace CirclePolygonCollision
             
             var mouseState = Mouse.GetState();
             _circle.Location = new Vector2(mouseState.X, mouseState.Y);
+
+            _circle.Radius = Radius + (mouseState.ScrollWheelValue / 10);
 
             _brush = Brush.White;
             if (_circle.Collides(_polygon))

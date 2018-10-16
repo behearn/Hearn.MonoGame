@@ -40,10 +40,22 @@ namespace Hearn.MonoGame.Geometry
 
         public bool Collides(Polygon p)
         {
+            //Circle ecompasses polygon
+            foreach (var v in p.Verticies)
+            {
+                if (Collides(v))
+                {
+                    return true;
+                }
+            }
+
+            //Polygon ecompasses circle
             if (p.Collides(Location))
             {
                 return true;
             }
+
+            //Circle intersects edge of polygon
             if (IntersectPoints(p).Any())
             {
                 return true;

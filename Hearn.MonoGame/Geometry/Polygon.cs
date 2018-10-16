@@ -7,7 +7,7 @@ using System.Text;
 
 namespace Hearn.MonoGame.Geometry
 {
-    public abstract class Polygon
+    public class Polygon
     {
 
         private Vector2 _location;
@@ -35,19 +35,24 @@ namespace Hearn.MonoGame.Geometry
         /// Creates a polygon with the specified number of verticies
         /// </summary>
         /// <param name="verticies"></param>
-        public Polygon(int verticies)
+        public Polygon(Vector2[] verticies)
         {
-            if (verticies < 3)
+            if (verticies == null)
+            {
+                throw new ArgumentException("verticies required");
+            }
+            if (verticies.Length < 3)
             {
                 throw new ArgumentException("Minimum number of verticies is 3");
             }
-            _numVerticies = verticies;
-            Verticies = new Vector2[verticies];
-            Lines = new Line[verticies];
+            _numVerticies = verticies.Length;
+            Verticies = verticies;
+            Lines = new Line[_numVerticies];
             for (var i = 0; i < Verticies.Length; i++)
             {
                 Lines[i] = new Line();
             }
+            Recalculate();
         }
 
         /// <summary>
@@ -127,29 +132,44 @@ namespace Hearn.MonoGame.Geometry
         /// <returns></returns>
         public bool Collides(Vector2 v)
         {
+
+            //Cast vertical and horizontal lines from the vector passed in
             var rayCastX = new Line(v, v + new Vector2(v.X + 200, 0));
             var rayCastY = new Line(v, v + new Vector2(0, v.Y + 200));
 
+            //Track intersections so that line joins aren't counted twice
+            var intersections = new List<Vector2>();
+
             var intersectionsX = 0;
             var intersectionsY = 0;
+
             foreach (var l in Lines)
             {
-
-                var intersectPointX = rayCastX.IntersectPoint(l);
-                if (!float.IsNaN(intersectPointX.X))
+                //Count horizontal intersections
+                var intersectPointX = rayCastX.IntersectsAt(l);
+                if (!intersections.Contains(intersectPointX))
                 {
-                    if (intersectPointX.X >= rayCastX.Start.X)
+                    if (!float.IsNaN(intersectPointX.X))
                     {
-                        intersectionsX++;
+                        if (intersectPointX.X >= rayCastX.Start.X)
+                        {
+                            intersectionsX++;
+                            intersections.Add(intersectPointX);
+                        }
                     }
                 }
 
-                var intersectPointY = rayCastY.IntersectPoint(l);
-                if (!float.IsNaN(intersectPointY.Y))
+                //Count vertical intersections
+                var intersectPointY = rayCastY.IntersectsAt(l);
+                if (!intersections.Contains(intersectPointY))
                 {
-                    if (intersectPointY.Y >= rayCastY.Start.Y)
+                    if (!float.IsNaN(intersectPointY.Y))
                     {
-                        intersectionsY++;
+                        if (intersectPointY.Y >= rayCastY.Start.Y)
+                        {
+                            intersectionsY++;
+                            intersections.Add(intersectPointY);
+                        }
                     }
                 }
             }
@@ -241,7 +261,7 @@ namespace Hearn.MonoGame.Geometry
             }
             return normals.ToArray();
         }
-        
+
         protected virtual Vector2 RecalculateOrigin()
         {
             var width = Verticies.Max(v => v.X) - Verticies.Min(v => v.X);
@@ -285,9 +305,7 @@ namespace Hearn.MonoGame.Geometry
         {
 
             UpdateVerticies();
-
-            UpdateLines();
-
+            
             if (_centerOrigin)
             {
                 _originVector = RecalculateOrigin();
@@ -295,6 +313,7 @@ namespace Hearn.MonoGame.Geometry
 
             RotateVerticiesAroundOrigin();
 
+            UpdateLines();
         }
 
     }
