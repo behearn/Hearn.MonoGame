@@ -19,12 +19,18 @@ namespace DampedHarmonicMotion
         Hearn.MonoGame.Physics.DampedHarmonicMotion _dampedHarmonicMotion;
 
         bool _bounce;
+        double _elapsedTime;
+        int _width;
+        int _height;
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            _width = graphics.PreferredBackBufferWidth;
+            _height = graphics.PreferredBackBufferHeight;
+            
             _dampedHarmonicMotion = new Hearn.MonoGame.Physics.DampedHarmonicMotion();
 
             //base.TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0, 50);
@@ -39,7 +45,6 @@ namespace DampedHarmonicMotion
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -78,6 +83,14 @@ namespace DampedHarmonicMotion
 
             _bounce = Keyboard.GetState().IsKeyDown(Keys.Space);
 
+            _elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (_elapsedTime >= _width)
+            {
+                _elapsedTime = 0;
+                _dampedHarmonicMotion.Init(_height / 2, 0.01f, 0.1f, 10, 0, gameTime);
+            }
+
             base.Update(gameTime);
         }
 
@@ -93,48 +106,37 @@ namespace DampedHarmonicMotion
             
             drawBatch.FillCircle(Brush.Red, new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), 5);
 
-            var length = graphics.GraphicsDevice.Viewport.Width * 3;
+            var prevA = _dampedHarmonicMotion.Calculate(0);
 
-            var a = graphics.GraphicsDevice.Viewport.Height / 2;
-            var k = 10f;
-            var b = 0.75f;
-
-            var prevX = _dampedHarmonicMotion.Calculate(a, k, b, 0);
-
-            var step = 0.005f;
-            var spacing = (1f / step);
-
-            for (var t = step; t < length / spacing; t += step)
+            for (var t = 1; t < _width; t++)
             {
 
-                var x = _dampedHarmonicMotion.Calculate(a, k, b, t);
+                var a = _dampedHarmonicMotion.Calculate(t);
 
                 if (_bounce)
                 {
-                    x = Math.Abs(x);
+                    a = Math.Abs(a);
                 }
 
-                var p0 = new Vector2((t - step) * spacing, a - prevX);
-                var p1 = new Vector2(t * spacing, a - x);
+                var p0 = new Vector2(t, (_height / 2) - prevA);
+                var p1 = new Vector2(t, (_height / 2) - a);
 
                 drawBatch.DrawLine(Pen.Black, p0, p1);
 
-                prevX = x;
+                prevA = a;
 
             }
-
-            var gt = (gameTime.TotalGameTime.TotalMilliseconds % length) * step;
             
-            var pos = _dampedHarmonicMotion.Calculate(a, k, b, (float)gt);
+            var amplitude = _dampedHarmonicMotion.Calculate(gameTime);
 
             if (_bounce)
             {
-                pos = Math.Abs(pos);
+                amplitude = Math.Abs(amplitude);
             }
 
-            drawBatch.FillCircle(Brush.Yellow, new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, a - pos), 10);
+            drawBatch.FillCircle(Brush.Yellow, new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, (_height / 2) - amplitude), 10);
 
-            drawBatch.FillCircle(Brush.Black, new Vector2((float)(gt / step), a - pos), 5);
+            drawBatch.FillCircle(Brush.Black, new Vector2((float)_elapsedTime, (_height / 2) - amplitude), 5);
 
             drawBatch.End();
 

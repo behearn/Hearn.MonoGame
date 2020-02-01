@@ -17,12 +17,21 @@ namespace SimpleHarmonicMotion
 
         Hearn.MonoGame.Physics.SimpleHarmonicMotion _simpleHarmonicMotion;
 
+        double _elapsedTime;
+        int _width;
+        int _height;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
+            _width = graphics.PreferredBackBufferWidth;
+            _height = graphics.PreferredBackBufferHeight;
+
             _simpleHarmonicMotion = new Hearn.MonoGame.Physics.SimpleHarmonicMotion();
+            
+            //base.TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0, 50);
 
         }
 
@@ -34,7 +43,6 @@ namespace SimpleHarmonicMotion
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
 
             base.Initialize();
         }
@@ -71,7 +79,13 @@ namespace SimpleHarmonicMotion
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            _elapsedTime += gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            if (_elapsedTime >= _width)
+            {
+                _elapsedTime = 0;
+                _simpleHarmonicMotion.Init(_height / 2, 0.01f, 10, 0, gameTime);
+            }
 
             base.Update(gameTime);
         }
@@ -86,34 +100,26 @@ namespace SimpleHarmonicMotion
 
             drawBatch.Begin();
 
-            var length = graphics.GraphicsDevice.Viewport.Width;
+            var prevA = _simpleHarmonicMotion.Calculate(0);
 
-            var a = graphics.GraphicsDevice.Viewport.Height / 2;
-            var k = 10f;
-
-            var prevX = _simpleHarmonicMotion.Calculate(a, k, 0);
-
-            var step = 0.01f;
-            var spacing = (1f / step);
-
-            for (var t = step; t < length / spacing; t += step)
+            for (var t = 1; t < _width; t++)
             {
-                               
-                var x = _simpleHarmonicMotion.Calculate(a, k, t);
 
-                var p0 = new Vector2((t - step) * spacing, a - prevX);
-                var p1 = new Vector2(t * spacing, a - x);
+                var a = _simpleHarmonicMotion.Calculate(t);
+
+                var p0 = new Vector2(t, (_height / 2) - prevA);
+                var p1 = new Vector2(t, (_height / 2) - a);
 
                 drawBatch.DrawLine(Pen.Black, p0, p1);
 
-                prevX = x;
+                prevA = a;
 
             }
 
-            var gt = (gameTime.TotalGameTime.TotalMilliseconds % length) * step;
+            var amplitude = _simpleHarmonicMotion.Calculate(gameTime);
 
-            var pos = _simpleHarmonicMotion.Calculate(a, k, (float)gt);
-            drawBatch.FillCircle(Brush.Black, new Vector2((float)(gt / step), a - pos), 5);
+
+            drawBatch.FillCircle(Brush.Black, new Vector2((float)_elapsedTime, (_height / 2) - amplitude), 5);
 
             drawBatch.End();
 
@@ -121,3 +127,4 @@ namespace SimpleHarmonicMotion
         }
     }
 }
+
