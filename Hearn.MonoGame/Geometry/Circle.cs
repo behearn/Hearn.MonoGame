@@ -85,11 +85,11 @@ namespace Hearn.MonoGame.Geometry
 
             var intersections = new List<Vector2>();
 
-            var x1 = l.Start.X - Location.X;
-            var y1 = l.Start.Y - Location.Y;
+            var x1 = (int)(l.Start.X - Location.X);
+            var y1 = (int)(l.Start.Y - Location.Y);
 
-            var x2 = l.End.X - Location.X;
-            var y2 = l.End.Y - Location.Y;
+            var x2 = (int)(l.End.X - Location.X);
+            var y2 = (int)(l.End.Y - Location.Y);
 
             var dx = x2 - x1;
             var dy = y2 - y1;
