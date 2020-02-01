@@ -86,15 +86,17 @@ namespace SimpleHarmonicMotion
 
             drawBatch.Begin();
 
+            var length = graphics.GraphicsDevice.Viewport.Width;
+
             var a = graphics.GraphicsDevice.Viewport.Height / 2;
-            var k = 5f;
+            var k = 10f;
 
             var prevX = _simpleHarmonicMotion.Calculate(a, k, 0);
 
             var step = 0.01f;
             var spacing = (1f / step);
 
-            for (var t = step; t < graphics.GraphicsDevice.Viewport.Width / spacing; t += step)
+            for (var t = step; t < length / spacing; t += step)
             {
                                
                 var x = _simpleHarmonicMotion.Calculate(a, k, t);
@@ -107,6 +109,11 @@ namespace SimpleHarmonicMotion
                 prevX = x;
 
             }
+
+            var gt = (gameTime.TotalGameTime.TotalMilliseconds % length) * step;
+
+            var pos = _simpleHarmonicMotion.Calculate(a, k, (float)gt);
+            drawBatch.FillCircle(Brush.Black, new Vector2((float)(gt / step), a - pos), 5);
 
             drawBatch.End();
 

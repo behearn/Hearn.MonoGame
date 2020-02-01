@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace DampedHarmonicMotion
 {
@@ -17,12 +18,16 @@ namespace DampedHarmonicMotion
 
         Hearn.MonoGame.Physics.DampedHarmonicMotion _dampedHarmonicMotion;
 
+        bool _bounce;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
 
             _dampedHarmonicMotion = new Hearn.MonoGame.Physics.DampedHarmonicMotion();
+
+            //base.TargetElapsedTime = new System.TimeSpan(0, 0, 0, 0, 50);
 
         }
 
@@ -71,7 +76,7 @@ namespace DampedHarmonicMotion
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            _bounce = Keyboard.GetState().IsKeyDown(Keys.Space);
 
             base.Update(gameTime);
         }
@@ -85,20 +90,29 @@ namespace DampedHarmonicMotion
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             drawBatch.Begin();
+            
+            drawBatch.FillCircle(Brush.Red, new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, graphics.GraphicsDevice.Viewport.Height / 2), 5);
+
+            var length = graphics.GraphicsDevice.Viewport.Width * 3;
 
             var a = graphics.GraphicsDevice.Viewport.Height / 2;
-            var k = 5f;
+            var k = 10f;
             var b = 0.75f;
 
             var prevX = _dampedHarmonicMotion.Calculate(a, k, b, 0);
 
-            var step = 0.01f;
+            var step = 0.005f;
             var spacing = (1f / step);
 
-            for (var t = step; t < graphics.GraphicsDevice.Viewport.Width / spacing; t += step)
+            for (var t = step; t < length / spacing; t += step)
             {
 
                 var x = _dampedHarmonicMotion.Calculate(a, k, b, t);
+
+                if (_bounce)
+                {
+                    x = Math.Abs(x);
+                }
 
                 var p0 = new Vector2((t - step) * spacing, a - prevX);
                 var p1 = new Vector2(t * spacing, a - x);
@@ -108,6 +122,19 @@ namespace DampedHarmonicMotion
                 prevX = x;
 
             }
+
+            var gt = (gameTime.TotalGameTime.TotalMilliseconds % length) * step;
+            
+            var pos = _dampedHarmonicMotion.Calculate(a, k, b, (float)gt);
+
+            if (_bounce)
+            {
+                pos = Math.Abs(pos);
+            }
+
+            drawBatch.FillCircle(Brush.Yellow, new Vector2(graphics.GraphicsDevice.Viewport.Width / 2, a - pos), 10);
+
+            drawBatch.FillCircle(Brush.Black, new Vector2((float)(gt / step), a - pos), 5);
 
             drawBatch.End();
 
