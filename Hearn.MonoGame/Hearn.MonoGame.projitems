@@ -18,6 +18,10 @@
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Triangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Helpers\Vector2Ex.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Circle.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mechanics\Arm.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Mechanics\Kinematics.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\DampedHarmonicMotion.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Physics\SimpleHarmonicMotion.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Services\AssetManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Widgets\DraggableCircle.cs" />
   </ItemGroup>

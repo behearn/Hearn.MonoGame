@@ -30,9 +30,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircleLineCollision", "Demo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CirclePolygonCollision", "Demos\CirclePolygonCollision\CirclePolygonCollision.csproj", "{55F1CBBA-4B40-4E28-B8FD-08636E4421D6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InverseKinematics", "Demos\InverseKinematics\InverseKinematics.csproj", "{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHarmonicMotion", "Demos\SimpleHarmonicMotion\SimpleHarmonicMotion.csproj", "{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DampedHarmonicMotion", "Demos\DampedHarmonicMotion\DampedHarmonicMotion.csproj", "{08366E79-E99D-4C68-BCC1-1EEDB620550D}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Hearn.MonoGame\Hearn.MonoGame.projitems*{08366e79-e99d-4c68-bcc1-1eedb620550d}*SharedItemsImports = 4
 		Hearn.MonoGame\Hearn.MonoGame.projitems*{8305c0a6-a341-491a-a447-86f6bdaaba34}*SharedItemsImports = 13
+		Hearn.MonoGame\Hearn.MonoGame.projitems*{9e1ca286-fef6-4190-8e83-e6d08a60c88a}*SharedItemsImports = 4
 		Hearn.MonoGame\Hearn.MonoGame.projitems*{cf8584cc-e1bf-4697-8c3d-5a6efd2e4fec}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -86,6 +94,24 @@ Global
 		{55F1CBBA-4B40-4E28-B8FD-08636E4421D6}.Release|Any CPU.ActiveCfg = Release|x86
 		{55F1CBBA-4B40-4E28-B8FD-08636E4421D6}.Release|x86.ActiveCfg = Release|x86
 		{55F1CBBA-4B40-4E28-B8FD-08636E4421D6}.Release|x86.Build.0 = Release|x86
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}.Debug|x86.ActiveCfg = Debug|x86
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}.Debug|x86.Build.0 = Debug|x86
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}.Release|Any CPU.ActiveCfg = Release|x86
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}.Release|x86.ActiveCfg = Release|x86
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A}.Release|x86.Build.0 = Release|x86
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}.Debug|x86.ActiveCfg = Debug|x86
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}.Debug|x86.Build.0 = Debug|x86
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}.Release|Any CPU.ActiveCfg = Release|x86
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}.Release|x86.ActiveCfg = Release|x86
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A}.Release|x86.Build.0 = Release|x86
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Debug|x86.ActiveCfg = Debug|x86
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Debug|x86.Build.0 = Debug|x86
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Release|Any CPU.ActiveCfg = Release|x86
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Release|x86.ActiveCfg = Release|x86
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +126,9 @@ Global
 		{4273FEBE-C084-47F5-A14A-9221092BFBCA} = {34E08E25-13FB-45B8-95A2-1CBA5B8F6359}
 		{794A8A38-F6F7-4F6A-969C-C5A1251F80E3} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 		{55F1CBBA-4B40-4E28-B8FD-08636E4421D6} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
+		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
+		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
+		{08366E79-E99D-4C68-BCC1-1EEDB620550D} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F761F500-51C3-4521-8B69-C210C8120613}
