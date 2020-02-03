@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHarmonicMotion", "Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DampedHarmonicMotion", "Demos\DampedHarmonicMotion\DampedHarmonicMotion.csproj", "{08366E79-E99D-4C68-BCC1-1EEDB620550D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paths", "Demos\Paths\Paths.csproj", "{274CE09D-AF69-4ADE-8035-43E7EB0371A8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Hearn.MonoGame\Hearn.MonoGame.projitems*{08366e79-e99d-4c68-bcc1-1eedb620550d}*SharedItemsImports = 4
@@ -112,6 +114,12 @@ Global
 		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Release|Any CPU.ActiveCfg = Release|x86
 		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Release|x86.ActiveCfg = Release|x86
 		{08366E79-E99D-4C68-BCC1-1EEDB620550D}.Release|x86.Build.0 = Release|x86
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8}.Debug|x86.ActiveCfg = Debug|x86
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8}.Debug|x86.Build.0 = Debug|x86
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8}.Release|Any CPU.ActiveCfg = Release|x86
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8}.Release|x86.ActiveCfg = Release|x86
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -129,6 +137,7 @@ Global
 		{6AFAC3DF-2CBA-45C1-B0F3-2097383CE96A} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 		{9E1CA286-FEF6-4190-8E83-E6D08A60C88A} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 		{08366E79-E99D-4C68-BCC1-1EEDB620550D} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
+		{274CE09D-AF69-4ADE-8035-43E7EB0371A8} = {88844D34-5E3E-41F6-86C8-C4ECE49C4752}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F761F500-51C3-4521-8B69-C210C8120613}
