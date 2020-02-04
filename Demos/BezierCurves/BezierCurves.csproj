@@ -9,8 +9,8 @@
     <ProjectGuid>{274CE09D-AF69-4ADE-8035-43E7EB0371A8}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Paths</RootNamespace>
-    <AssemblyName>Paths</AssemblyName>
+    <RootNamespace>BezierCurves</RootNamespace>
+    <AssemblyName>BezierCurves</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MonoGamePlatform>Windows</MonoGamePlatform>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>

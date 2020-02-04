@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Paths
+namespace BezierCurves
 {
 #if WINDOWS || LINUX
     /// <summary>

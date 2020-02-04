@@ -36,7 +36,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleHarmonicMotion", "Dem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DampedHarmonicMotion", "Demos\DampedHarmonicMotion\DampedHarmonicMotion.csproj", "{08366E79-E99D-4C68-BCC1-1EEDB620550D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Paths", "Demos\Paths\Paths.csproj", "{274CE09D-AF69-4ADE-8035-43E7EB0371A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BezierCurves", "Demos\BezierCurves\BezierCurves.csproj", "{274CE09D-AF69-4ADE-8035-43E7EB0371A8}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution

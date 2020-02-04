@@ -12,8 +12,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)Components\FrameRate.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Ticker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\TargetViewport.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Geometry\BezierCurve.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Line.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Polygon.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Geometry\CubicBezierCurve.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Geometry\QuadraticBezierCurve.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Rectangle2.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Triangle.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Path.cs" />
