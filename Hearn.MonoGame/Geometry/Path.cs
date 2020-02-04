@@ -1,5 +1,4 @@
-﻿using Hearn.MonoGame.Helpers;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +19,7 @@ namespace Hearn.MonoGame.Geometry
                 {
                     for (var i = 1; i < Vertices.Length; i++)
                     {
-                        length += Math.Abs(Vector2Ex.Distance(Vertices[i - 1], Vertices[i]));
+                        length += Math.Abs(Vector2.Distance(Vertices[i - 1], Vertices[i]));
                     }
                 }
                 return length;
@@ -53,7 +52,7 @@ namespace Hearn.MonoGame.Geometry
             var i = 1;
             while (i < Vertices.Length)
             {
-                var distance = Math.Abs(Vector2Ex.Distance(Vertices[i - 1], Vertices[i]));
+                var distance = Math.Abs(Vector2.Distance(Vertices[i - 1], Vertices[i]));
 
                 if (cumulativeDistance + distance < position)
                 {
