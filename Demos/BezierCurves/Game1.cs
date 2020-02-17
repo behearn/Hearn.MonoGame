@@ -24,7 +24,11 @@ namespace BezierCurves
         BezierCurve _cubicBezierCurve;
         Vector2 _cubicCurrentVector;
         DraggableCircle[] _cubicDragPoints;
-        
+
+        BezierCurve _multiPointBezierCurve;
+        Vector2 _multiPointCurrentVector;
+        DraggableCircle[] _multiPointDragPoints;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -83,6 +87,30 @@ namespace BezierCurves
                 };
             }
 
+            var points = new Vector2[]
+            {
+                new Vector2(10, 10),
+                new Vector2(10, graphics.PreferredBackBufferHeight - 10),
+                new Vector2(graphics.PreferredBackBufferWidth - 10, graphics.PreferredBackBufferHeight - 10),
+                new Vector2(graphics.PreferredBackBufferWidth - 10, 10),
+                new Vector2(graphics.PreferredBackBufferWidth - 300, 30),
+            };
+
+            _multiPointBezierCurve = new MultiPointBezierCurve(points, 100);
+
+            _multiPointDragPoints = new DraggableCircle[5];
+            for (var i = 0; i < 5; i++)
+            {
+                var index = i;
+                _multiPointDragPoints[i] = new DraggableCircle()
+                {
+                    Location = _multiPointBezierCurve.GetControlPoint(index),
+                    Radius = DragCircleRadius,
+                    OnDrag = v => { _multiPointBezierCurve.SetControlPoint(index, v); }
+                };
+            }
+
+
             base.Initialize();
         }
 
@@ -122,6 +150,7 @@ namespace BezierCurves
 
             _quadraticCurrentVector = _quadraticBezierCurve.Lerp(r);
             _cubicCurrentVector = _cubicBezierCurve.Lerp(r);
+            _multiPointCurrentVector = _multiPointBezierCurve.Lerp(r);
 
             for (var i = 0; i < 3; i++)
             {
@@ -131,6 +160,11 @@ namespace BezierCurves
             for (var i = 0; i < 4; i++)
             {
                 _cubicDragPoints[i].Update();
+            }
+
+            for (var i = 0; i < 5; i++)
+            {
+                _multiPointDragPoints[i].Update();
             }
 
             base.Update(gameTime);
@@ -146,35 +180,52 @@ namespace BezierCurves
 
             _drawBatch.Begin();
 
-            for (var i = 1; i < _quadraticBezierCurve.Vertices.Length; i++)
+            //for (var i = 1; i < _quadraticBezierCurve.Vertices.Length; i++)
+            //{
+            //    _drawBatch.DrawLine(Pen.Black, _quadraticBezierCurve.Vertices[i - 1], _quadraticBezierCurve.Vertices[i]);
+            //}
+
+            //_drawBatch.FillCircle(Brush.Red, _quadraticCurrentVector, 10);
+
+            //for (var i = 0; i < 3; i++)
+            //{
+            //    _drawBatch.FillCircle(Brush.Red, _quadraticDragPoints[i].Location, _quadraticDragPoints[i].Radius);
+            //    if (i < 2)
+            //    {
+            //        _drawBatch.DrawLine(Pen.Red, _quadraticDragPoints[i].Location, _quadraticDragPoints[i + 1].Location);
+            //    }
+            //}
+
+            //for (var i = 1; i < _cubicBezierCurve.Vertices.Length; i++)
+            //{
+            //    _drawBatch.DrawLine(Pen.Black, _cubicBezierCurve.Vertices[i - 1], _cubicBezierCurve.Vertices[i]);
+            //}
+
+            //_drawBatch.FillCircle(Brush.Green, _cubicCurrentVector, 10);
+
+            //for (var i = 0; i < 4; i++)
+            //{
+            //    _drawBatch.FillCircle(Brush.Green, _cubicDragPoints[i].Location, _cubicDragPoints[i].Radius);
+            //    if (i < 3)
+            //    {
+            //        _drawBatch.DrawLine(Pen.Green, _cubicDragPoints[i].Location, _cubicDragPoints[i + 1].Location);
+            //    }
+            //}
+
+
+            for (var i = 1; i < _multiPointBezierCurve.Vertices.Length; i++)
             {
-                _drawBatch.DrawLine(Pen.Black, _quadraticBezierCurve.Vertices[i - 1], _quadraticBezierCurve.Vertices[i]);
+                _drawBatch.DrawLine(Pen.Black, _multiPointBezierCurve.Vertices[i - 1], _multiPointBezierCurve.Vertices[i]);
             }
 
-            _drawBatch.FillCircle(Brush.Red, _quadraticCurrentVector, 10);
+            _drawBatch.FillCircle(Brush.Green, _multiPointCurrentVector, 10);
 
-            for (var i = 0; i < 3; i++)
+            for (var i = 0; i < 5; i++)
             {
-                _drawBatch.FillCircle(Brush.Red, _quadraticDragPoints[i].Location, _quadraticDragPoints[i].Radius);
-                if (i < 2)
+                _drawBatch.FillCircle(Brush.Green, _multiPointDragPoints[i].Location, _multiPointDragPoints[i].Radius);
+                if (i < 4)
                 {
-                    _drawBatch.DrawLine(Pen.Red, _quadraticDragPoints[i].Location, _quadraticDragPoints[i + 1].Location);
-                }
-            }
-
-            for (var i = 1; i < _cubicBezierCurve.Vertices.Length; i++)
-            {
-                _drawBatch.DrawLine(Pen.Black, _cubicBezierCurve.Vertices[i - 1], _cubicBezierCurve.Vertices[i]);
-            }
-
-            _drawBatch.FillCircle(Brush.Green, _cubicCurrentVector, 10);
-
-            for (var i = 0; i < 4; i++)
-            {
-                _drawBatch.FillCircle(Brush.Green, _cubicDragPoints[i].Location, _cubicDragPoints[i].Radius);
-                if (i < 3)
-                {
-                    _drawBatch.DrawLine(Pen.Green, _cubicDragPoints[i].Location, _cubicDragPoints[i + 1].Location);
+                    _drawBatch.DrawLine(Pen.Green, _multiPointDragPoints[i].Location, _multiPointDragPoints[i + 1].Location);
                 }
             }
 

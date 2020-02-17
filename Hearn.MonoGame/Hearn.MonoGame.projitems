@@ -10,9 +10,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Components\FrameRate.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Components\InputState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\Ticker.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Components\TargetViewport.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\BezierCurve.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Geometry\MultiPointBezierCurve.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Line.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\Polygon.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Geometry\CubicBezierCurve.cs" />
