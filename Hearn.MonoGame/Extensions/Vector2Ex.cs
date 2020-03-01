@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hearn.MonoGame.Helpers
+namespace Hearn.MonoGame.Extensions
 {
     public class Vector2Ex
     {

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Hearn.MonoGame.Helpers
+namespace Hearn.MonoGame.Extensions
 {
     public static class SpriteBatchEx
     {

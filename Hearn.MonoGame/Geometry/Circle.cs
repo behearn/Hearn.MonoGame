@@ -1,4 +1,4 @@
-﻿using Hearn.MonoGame.Helpers;
+﻿using Hearn.MonoGame.Extensions;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
